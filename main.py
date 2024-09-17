@@ -6,11 +6,11 @@ import random
 import re
 import math
 
-# Function to scrape movies from a given URL using Selenium
+# Function to scrape number of movies and movies from a given URL using Selenium
 def scrape_movies_for_pages(url):  #plus scrapes the first page
     try:
         # Set up the WebDriver (Chrome in this case)
-        service = Service('C:\Program Files\chromedriver-win64\chromedriver.exe')
+        service = Service('C:\Program Files\chromedriver-win64\chromedriver.exe')    #PASS THE PATH TO CHROMEDRIVER ON YOUR PC
         driver = webdriver.Chrome(service=service)
         
         # Open the URL with the Selenium WebDriver
@@ -22,6 +22,7 @@ def scrape_movies_for_pages(url):  #plus scrapes the first page
         # Get the page source
         soup = BeautifulSoup(driver.page_source, 'html.parser')
 
+        #Scrapes the number of movies in the selected genre
         len_movies = soup.find('div', {'data-tid': 'c97bf23b'})
         len_movies_a = len_movies.find('a', {'class': 'styles_root__o_aAP styles_rootActive__xFaoQ'}) 
         len_movies_span = len_movies_a.find('span', {'class': 'styles_subtitle__V93vt'})
@@ -31,6 +32,7 @@ def scrape_movies_for_pages(url):  #plus scrapes the first page
             len_movies_num = re.findall(r'\d+', len_movies_text)
             print(f"Found {len_movies_num[0]} movies")
 
+            #Page contains max 50 movies, so calculates how many pages need to be scraped for number of movies available
             movies_per_page = 50
             num_pages = math.ceil(int(len_movies_num[0])/movies_per_page)
             # print(num_pages)
@@ -41,7 +43,7 @@ def scrape_movies_for_pages(url):  #plus scrapes the first page
         # Print the extracted movie elements for verification
         print(f"Scanned {len(top_movies)} movies in page 1")
 
-        # Loop through each movie block and extract the title
+        # Loop through each movie block and extract the title and the link to movie
         movies_info = []
         for movie in top_movies:
             title_element = movie.find('span', {'class': 'desktop-list-main-info_secondaryTitle__ighTt'})
@@ -50,19 +52,20 @@ def scrape_movies_for_pages(url):  #plus scrapes the first page
                 title = title_element.text.strip()
                 link = link_element['href'].strip()
                 movies_info.append((title, link))
+
         # Close the browser after scraping
         driver.quit()
         return num_pages, movies_info
-    
     
     except Exception as e:
         print(f"An error has occurred: {e}")
         return 0, []
 
+# Function to scrape movies from a given URL using Selenium
 def scrape_movies_list(url, page):
     try:
         # Set up the WebDriver (Chrome in this case)
-        service = Service('C:\Program Files\chromedriver-win64\chromedriver.exe')
+        service = Service('C:\Program Files\chromedriver-win64\chromedriver.exe')  #PASS THE PATH TO CHROMEDRIVER ON YOUR PC
         driver = webdriver.Chrome(service=service)
         
         # Open the URL with the Selenium WebDriver
@@ -80,7 +83,7 @@ def scrape_movies_list(url, page):
         # Print the extracted movie elements for verification
         print(f"Scanned {len(top_movies)} movies in page {page}")
 
-        # Loop through each movie block and extract the title
+        # Loop through each movie block and extract the title and the link to movie
         movies_info = []
         for movie in top_movies:
             title_element = movie.find('span', {'class': 'desktop-list-main-info_secondaryTitle__ighTt'})
@@ -93,6 +96,7 @@ def scrape_movies_list(url, page):
         # Close the browser after scraping
         driver.quit()
         return movies_info
+    
     except Exception as e:
         print(f"An error has occurred: {e}")
         return []
@@ -164,6 +168,7 @@ Enter 1 or 2: ''')
             print("Enter a valid input!")
 
     
+    #Web scraping is done for multiple pages depending on number of movies under each genre. Worst case scenario: needs to scrape 4 times 
     page = 2
     while (page <= pages_num):
         print(f"There are {pages_num} pages of movies for this genre. Scraping page #{page}. Please wait...")
