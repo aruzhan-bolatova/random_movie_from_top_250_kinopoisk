@@ -24,13 +24,29 @@ The purpose of collecting this data is to provide users with a list of highly ra
 
 The scraper collects data from [Kinopoisk](https://www.kinopoisk.ru), a widely used movie rating and review platform in post-Soviet countries. Kinopoisk was chosen because of its extensive and credible database of top-rated movies, making it a valuable resource for building a movie recommendation tool. The data is publicly accessible, and the scraper adheres to ethical practices outlined in our ETHICS.md file such as respecting the site’s `robots.txt` and terms of service.
 
-## How to Run the Project
+### Technologies Used
 
-To run this project on your local machine, follow these steps:
+- **Python**: For data processing and automation.
+- **Selenium**: For scraping top250 data from the web.
 
-1. Clone the repository
-2. Navigate to the project directory (cd movie-scraper-randomizer)
-3. Setting up a virtual environment is **NOT** required to run this project
-4. Install the required dependencies from requirements.txt
-5. Install a ChromeDriver and pass the address (path) of chromedriver on your PC in lines 13, 65
-6. Run it!
+### How to Run the Project
+
+1. **Clone this repository.**
+
+2. **Install the Required Libraries**: `pip install -r requirements.txt`
+
+3. **Download ChromeDriver**:
+    - Visit [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/) to download the correct version for your browser.
+  
+5. **Set Path to ChromeDriver**:
+    - Ensure that the path to the ChromeDriver is correctly specified in the script:
+      ```python
+      from selenium import webdriver
+      
+      # Set the path to the ChromeDriver
+      driver = webdriver.Chrome(executable_path='/path/to/chromedriver')
+      ```
+
+5. **Running the Code**:
+    - Execute the script to begin scraping TOP 250 movies and getting randomized suggestion from the website.
+
